@@ -5,11 +5,16 @@ from banner import grab_banner
 
 def check_port(host, port, timeout=1):
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-        s.settimeout(timeout)
-        result = s.connect_ex((host, port))
-        return result == 0
+            s.settimeout(timeout)
+            result = s.connect_ex((host, port))
+            return result == 0
 
 def scan_ports(host, start, end,timeout=1, workers=100 ):
+    try:
+        socket.gethostbyname(host)
+    except socket.gaierror:
+        print("Не удалось найти хост:", host)
+        return []
     print("Сканирование портов")
     openPorts = []
     startTime = time.time()
@@ -23,7 +28,7 @@ def scan_ports(host, start, end,timeout=1, workers=100 ):
     return openPorts
 
 def scan_portsB(host, start, end,timeout=1, workers=100,out = False ):
-    banners = []
+    portsWithBanner = []
     openPorts = scan_ports(host, start, end,timeout, workers)
     startTime = time.time()
     with ThreadPoolExecutor(max_workers=workers) as executor:
@@ -31,9 +36,8 @@ def scan_portsB(host, start, end,timeout=1, workers=100,out = False ):
         for port, banner in zip(openPorts, results):
             if banner is  None:
                 banner = ("(баннера нет)")
-            banners.append(banner)
+            portsWithBanner.append((port,banner))
 
-    portsWithBanner = (list(zip(openPorts,banners)))
     print("Баннеры Заняли:", time.time() - startTime, "сек")
     if out:
         for port,banner in portsWithBanner:
@@ -44,5 +48,6 @@ def scan_portsB(host, start, end,timeout=1, workers=100,out = False ):
 
 
 if __name__ == "__main__":
-    #scan_ports("localhost", 1,1024)
-    scan_portsB("localhost", 1, 1024, workers=1024,out = True)
+    #print(scan_ports("localhost", 1,1024,1,1000))
+    #scan_portsB("localhost", 1, 1024, workers=1024,out = True)
+    pass
