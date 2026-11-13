@@ -16,5 +16,6 @@ def grab_banner(host, port, timeout=1):
     if not data:
         return None
     return data.decode("utf-8", errors="ignore").strip()
+
 if __name__ == "__main__":
     print(grab_banner("localhost", 8000))
