@@ -22,4 +22,4 @@ def scan_ports(host, start, end,timeout=1, workers=100 ):
     return openPorts
 
 if __name__ == "__main__":
-    print(scan_ports("192.168.0.1", 1, 1024))
+    print(scan_ports("localhost", 1, 1024, workers=100))
