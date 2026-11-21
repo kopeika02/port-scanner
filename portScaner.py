@@ -27,6 +27,7 @@ def scan_ports(host, start, end,timeout=1, workers=100 ):
             total = len(ports)
             if is_open:
                 openPorts.append(port)
+                print(f"({openPorts}", end="", flush=True)
             done += 1
             print(f"\r{done}/{total} ({done * 100 // total}%)", end="", flush=True)
         print()
@@ -67,4 +68,4 @@ if __name__ == "__main__":
     if args.banners:
         scan_portsB(args.host, args.start, args.end,args.timeout, args.workers,True)
     else:
-        print(scan_ports(args.host, args.start, args.end,args.timeout, args.workers))
+        print(f"\n{scan_ports(args.host, args.start, args.end,args.timeout, args.workers)}\n")
